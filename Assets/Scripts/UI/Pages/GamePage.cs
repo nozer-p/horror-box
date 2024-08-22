@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using HotForgeStudio.HorrorBox.Common;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace HotForgeStudio.HorrorBox
         private IAppStateManager _appStateManager;
         private IInputManager _inputManager;
         private IGameplayManager _gameplayManager;
+        private ISoundManager _soundManager;
 
         private MatchController _matchController;
 
@@ -30,6 +32,7 @@ namespace HotForgeStudio.HorrorBox
             _appStateManager = GameClient.Get<IAppStateManager>();
             _inputManager = GameClient.Get<IInputManager>();
             _gameplayManager = GameClient.Get<IGameplayManager>();
+            _soundManager = GameClient.Get<ISoundManager>();
 
             _matchController = GameClient.Get<IGameplayManager>().GetController<MatchController>();
 
@@ -44,6 +47,9 @@ namespace HotForgeStudio.HorrorBox
 
             _timeText = _selfPage.transform.Find("Image_Timer/Text_Time").GetComponent<TextMeshProUGUI>();
 
+            _gameplayManager.GameplayStartedEvent += GameplayStartedEventHandler;
+            _gameplayManager.GameplayEndedEvent += GameplayEndedEventHandler;
+
             _matchController.GameplaySecondsUpdatedEvent += GameplaySecondsUpdatedEventHandler;
 
             _pauseButton.onClick.AddListener(PauseButtonOnClickHandler);
@@ -54,6 +60,9 @@ namespace HotForgeStudio.HorrorBox
 
         public void Dispose()
         {
+            _gameplayManager.GameplayStartedEvent -= GameplayStartedEventHandler;
+            _gameplayManager.GameplayEndedEvent -= GameplayEndedEventHandler;
+
             _matchController.GameplaySecondsUpdatedEvent -= GameplaySecondsUpdatedEventHandler;
 
             _pauseButton.onClick.RemoveAllListeners();
@@ -85,6 +94,16 @@ namespace HotForgeStudio.HorrorBox
             _timeText.text = "0s";
         }
         
+        private void GameplayStartedEventHandler()
+        {
+            _controllersParent.gameObject.SetActive(true);
+        }
+
+        private void GameplayEndedEventHandler()
+        {
+            _controllersParent.gameObject.SetActive(false);
+        }
+
         private void GameplaySecondsUpdatedEventHandler()
         {
             int gameplaySeconds = _matchController.GameplaySeconds;
@@ -97,12 +116,14 @@ namespace HotForgeStudio.HorrorBox
 
         private void PauseButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             _gameplayManager.SetPauseStatusOfGameplay(true);
             _uiManager.DrawPopup<PausePopup>();
         }
 
         private void SettingsButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             _gameplayManager.SetPauseStatusOfGameplay(true);
             _uiManager.DrawPopup<SettingsPopup>();
         }

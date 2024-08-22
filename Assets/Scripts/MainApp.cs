@@ -78,7 +78,6 @@ namespace HotForgeStudio.HorrorBox
             {
                 GameClient.Instance.GetService<IGameplayManager>().SetPauseStatusOfGameplay(pause);
             }
-
             _lastOnApplicationPauseState = pause;
         }
 

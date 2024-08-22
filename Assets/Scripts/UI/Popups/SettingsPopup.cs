@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using HotForgeStudio.HorrorBox.Common;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace HotForgeStudio.HorrorBox
@@ -70,6 +71,8 @@ namespace HotForgeStudio.HorrorBox
 
         private void CloseButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
+
             _gameplayManager.SetPauseStatusOfGameplay(false);
 
             _dataManager.CachedUserLocalData.soundVolume = _soundManager.SoundVolume;

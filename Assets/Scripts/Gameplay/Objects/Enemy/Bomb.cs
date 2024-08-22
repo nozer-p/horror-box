@@ -15,6 +15,8 @@ namespace HotForgeStudio.HorrorBox
         {
             base.OnBehaviourHandlerTriggerEnteredHandler(collider);
 
+            return;
+
             if (collider.gameObject.Equals(_enemyController.GetEnemy(collider.gameObject)))
             {
                 _enemyController.KillEnemy(collider.gameObject);

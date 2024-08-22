@@ -20,7 +20,6 @@ namespace HotForgeStudio.HorrorBox
             _soundSources = new List<SoundSource>();
             _soundContainer = new GameObject("[SoundsContainer]").transform;
             _soundContainer.parent = MainApp.Instance.transform;
-            MonoBehaviour.DontDestroyOnLoad(_soundContainer);
 
             SoundData = GameClient.Get<ILoadObjectsManager>().GetObjectByPath<SoundData>("Data/SoundData");
 
@@ -113,13 +112,14 @@ namespace HotForgeStudio.HorrorBox
                 AudioSource = SoundSourceObject.AddComponent<AudioSource>();
                 AudioSource.clip = Sound;
                 AudioSource.loop = SoundParameters.Loop;
+                AudioSource.volume = SoundParameters.Volume * (SoundParameters.SFX ? _soundManager.SoundVolume : _soundManager.MusicVolume);
 
                 AudioSource.Play();
             }
 
             public void Update()
 			{
-                float targetVolume = SoundParameters.SFX ? _soundManager.SoundVolume : _soundManager.MusicVolume;
+                float targetVolume = SoundParameters.Volume * (SoundParameters.SFX ? _soundManager.SoundVolume : _soundManager.MusicVolume);
 
                 if (_crossFadeStarted)
                 {

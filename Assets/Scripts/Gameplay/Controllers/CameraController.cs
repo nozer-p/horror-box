@@ -54,30 +54,22 @@ namespace HotForgeStudio.HorrorBox
 			_cameraTarget = cameraTarget;
 		}
 
-		public void SetCameraOffset(Vector3 cameraOffset)
+        public Vector3 GetMovementDirection(Vector2 direction)
+        {
+            Vector3 rightMove = _right * direction.x;
+            Vector3 upMove = _forward * direction.y;
+            return rightMove + upMove;
+        }
+
+        private void SetCameraOffset(Vector3 cameraOffset)
         {
 			_cameraOffset = cameraOffset;
 		}
 
-		public void SetCameraDistance(float distance)
+		private void SetCameraDistance(float distance)
         {
 			CurrentCameraDistance = distance;
         }
-
-        public Vector3 GetMovementDirection(Vector2 direction)
-		{
-			Vector3 rightMove = _right * direction.x;
-			Vector3 upMove = _forward * direction.y;
-			return rightMove + upMove;
-		}
-
-		public void SetNewCameraPosition() 
-		{
-			var newPosition = _cameraTarget.transform.position + _cameraOffset;
-			newPosition -= _cameraObject.transform.forward * CurrentCameraDistance;
-
-			_cameraObject.transform.position = newPosition;
-		}
 
 		private void UpdateCameraPosition()
         {

@@ -15,7 +15,7 @@ MonoBehaviour:
   sounds:
   - type: 1
     clip: {fileID: 8300000, guid: c470ea1ba76daf24d97feae328278c89, type: 3}
-    volume: 0.5
+    volume: 0.85
     loop: 1
     sfx: 0
     crossFade: 0
@@ -25,5 +25,11 @@ MonoBehaviour:
     loop: 0
     sfx: 1
     crossFade: 0
+  - type: 3
+    clip: {fileID: 8300000, guid: c71e4636ee28b4a418bbeaf73d50af93, type: 3}
+    volume: 1
+    loop: 0
+    sfx: 1
+    crossFade: 1
   crossFadeInTime: 2
   crossFadeOutTime: 1

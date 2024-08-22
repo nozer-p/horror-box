@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 3175695471514394947}
   - component: {fileID: 651563271389064572}
   - component: {fileID: 7335066114763043463}
+  - component: {fileID: 1742951687219227897}
   m_Layer: 5
   m_Name: ResultsPopup
   m_TagString: Untagged
@@ -274,6 +275,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1742951687219227897
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2679745679379741689}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3082291382490056346
 GameObject:
   m_ObjectHideFlags: 0

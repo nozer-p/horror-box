@@ -10,6 +10,7 @@ namespace HotForgeStudio.HorrorBox
 
         private IUIManager _uiManager;
         private IAppStateManager _appStateManager;
+        private ISoundManager _soundManager;
 
         private Button _playButton;
         private Button _settingsButton;
@@ -18,6 +19,7 @@ namespace HotForgeStudio.HorrorBox
         {
             _uiManager = GameClient.Get<IUIManager>();
             _appStateManager = GameClient.Get<IAppStateManager>();
+            _soundManager = GameClient.Get<ISoundManager>();
 
             _selfPage = MonoBehaviour.Instantiate(GameClient.Get<ILoadObjectsManager>()
                 .GetObjectByPath<GameObject>("Prefabs/UI/Pages/MainPage"),
@@ -54,11 +56,13 @@ namespace HotForgeStudio.HorrorBox
 
         private void PlayButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             _appStateManager.ChangeAppState(Enumerators.AppState.Game);
         }
 
         private void SettingsButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             _uiManager.DrawPopup<SettingsPopup>();
         }            
     }

@@ -13,6 +13,7 @@ namespace HotForgeStudio.HorrorBox
         public int GameplaySeconds { get; private set; }
 
         private float _timer;
+
         private int _previousGameplaySeconds;
 
         public void Init()

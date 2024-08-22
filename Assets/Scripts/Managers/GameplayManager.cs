@@ -47,7 +47,8 @@ namespace HotForgeStudio.HorrorBox
                 new CameraController(),
                 new PlayerController(),
                 new MatchController(),
-                new EnemyController()
+                new EnemyController(),
+                new ExplosionController()
             };
 
             foreach (var item in _controllers)

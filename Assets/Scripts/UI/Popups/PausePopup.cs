@@ -11,6 +11,7 @@ namespace HotForgeStudio.HorrorBox
         private IUIManager _uiManager;
         private IGameplayManager _gameplayManager;
         private IAppStateManager _appStateManager;
+        private ISoundManager _soundManager;
 
         private Button _playButton;
         private Button _menuButton;
@@ -22,6 +23,7 @@ namespace HotForgeStudio.HorrorBox
             _uiManager = GameClient.Get<IUIManager>();
             _gameplayManager = GameClient.Get<IGameplayManager>();
             _appStateManager = GameClient.Get<IAppStateManager>();
+            _soundManager = GameClient.Get<ISoundManager>();
 
             _selfPopup = MonoBehaviour.Instantiate(GameClient.Get<ILoadObjectsManager>()
                 .GetObjectByPath<GameObject>("Prefabs/UI/Popups/PausePopup"),
@@ -67,12 +69,14 @@ namespace HotForgeStudio.HorrorBox
 
         private void PlayButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             Hide();
             _gameplayManager.SetPauseStatusOfGameplay(false);
         }
 
         private void MenuButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             Hide();
             _appStateManager.ChangeAppState(Enumerators.AppState.Main);
         }

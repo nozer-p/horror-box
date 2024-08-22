@@ -2,18 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using HotForgeStudio.HorrorBox.Common;
 using TMPro;
+using DG.Tweening;
 
 namespace HotForgeStudio.HorrorBox
 {
     public class ResultsPopup : IUIPopup
     {
-        private GameObject _selfPopup;
-
         private IUIManager _uiManager;
         private IAppStateManager _appStateManager;
         private IDataManager _dataManager;
+        private ISoundManager _soundManager;
 
         private MatchController _matchController;
+
+        private GameObject _selfPopup;
+        private GameObject _contentObject;
+
+        public GameObject Self => _selfPopup;
 
         private TextMeshProUGUI _currentTimeText;
         private TextMeshProUGUI _bestTimeText;
@@ -21,13 +26,14 @@ namespace HotForgeStudio.HorrorBox
         private Button _playAgainButton;
         private Button _menuButton;
 
-        public GameObject Self => _selfPopup;
+        private CanvasGroup _canvasGroup;
 
         public void Init()
         {
             _uiManager = GameClient.Get<IUIManager>();
             _appStateManager = GameClient.Get<IAppStateManager>();
             _dataManager = GameClient.Get<IDataManager>();
+            _soundManager = GameClient.Get<ISoundManager>();
 
             _matchController = GameClient.Get<IGameplayManager>().GetController<MatchController>();
 
@@ -35,11 +41,15 @@ namespace HotForgeStudio.HorrorBox
                 .GetObjectByPath<GameObject>("Prefabs/UI/Popups/ResultsPopup"),
                 _uiManager.Canvas.transform, false);
 
-            _currentTimeText = _selfPopup.transform.Find("Panel_Content/Text_CurrentTime").GetComponent<TextMeshProUGUI>();
-            _bestTimeText = _selfPopup.transform.Find("Panel_Content/Text_BestTime").GetComponent<TextMeshProUGUI>();
+            _contentObject = _selfPopup.transform.Find("Panel_Content").gameObject;
 
-            _playAgainButton = _selfPopup.transform.Find("Panel_Content/Container_Buttons/Button_PlayAgain").GetComponent<Button>();
-            _menuButton = _selfPopup.transform.Find("Panel_Content/Container_Buttons/Button_Menu").GetComponent<Button>();
+            _currentTimeText = _contentObject.transform.Find("Text_CurrentTime").GetComponent<TextMeshProUGUI>();
+            _bestTimeText = _contentObject.transform.Find("Text_BestTime").GetComponent<TextMeshProUGUI>();
+
+            _playAgainButton = _contentObject.transform.Find("Container_Buttons/Button_PlayAgain").GetComponent<Button>();
+            _menuButton = _contentObject.transform.Find("Container_Buttons/Button_Menu").GetComponent<Button>();
+
+            _canvasGroup = _selfPopup.GetComponent<CanvasGroup>();
 
             _playAgainButton.onClick.AddListener(PlayAgainButtonOnClickHandler);
             _menuButton.onClick.AddListener(MenuButtonOnClickHandler);
@@ -55,6 +65,8 @@ namespace HotForgeStudio.HorrorBox
 
         public void Hide()
         {
+            _canvasGroup.DOKill();
+            _canvasGroup.alpha = 1f;
             _selfPopup.SetActive(false);
         }
 
@@ -65,10 +77,15 @@ namespace HotForgeStudio.HorrorBox
 
         public void Show()
         {
-            SetTextData(_currentTimeText, Constants.CurrentTime);
-            SetTextData(_bestTimeText, Constants.BestTime);
+            SetTextData(_currentTimeText, Constants.CurrentTime, _matchController.GameplaySeconds);
+            SetTextData(_bestTimeText, Constants.BestTime, _dataManager.CachedUserLocalData.bestTimeSurvived);
 
+            _canvasGroup.DOKill();
+            _canvasGroup.alpha = 0.001f;
+            _contentObject.SetActive(false);
             _selfPopup.SetActive(true);
+            _canvasGroup.DOFade(1f, 3f).SetEase(Ease.InOutSine)
+                .OnComplete(() => _contentObject.SetActive(true));
         }
 
         public void Update()
@@ -79,9 +96,8 @@ namespace HotForgeStudio.HorrorBox
         {
         }
 
-        private void SetTextData(TextMeshProUGUI textMeshPro, string text)
+        private void SetTextData(TextMeshProUGUI textMeshPro, string text, int gameplaySeconds)
         {
-            int gameplaySeconds = _matchController.GameplaySeconds;
             int minutes = (gameplaySeconds % 3600) / 60;
             int seconds = gameplaySeconds % 60;
             string time = minutes != 0 ? $"{minutes}m {seconds}s" : $"{seconds}s";
@@ -90,12 +106,14 @@ namespace HotForgeStudio.HorrorBox
 
         private void PlayAgainButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             Hide();
             _appStateManager.ChangeAppState(Enumerators.AppState.Game);
         }
 
         private void MenuButtonOnClickHandler()
         {
+            _soundManager.PlaySound(Enumerators.SoundType.Knife);
             Hide();
             _appStateManager.ChangeAppState(Enumerators.AppState.Main);
         }

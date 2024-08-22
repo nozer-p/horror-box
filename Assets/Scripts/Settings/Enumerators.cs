@@ -34,7 +34,8 @@
             Unknown,
 
             MainMusic,
-            Explosion
+            Explosion,
+            Knife
         }
 
         public enum GameDataType

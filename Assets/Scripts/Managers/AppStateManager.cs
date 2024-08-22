@@ -1,10 +1,12 @@
 ﻿using HotForgeStudio.HorrorBox.Common;
-using HotForgeStudio.HorrorBox.Helpers;
+using System;
 
 namespace HotForgeStudio.HorrorBox
 {
     public sealed class AppStateManager : IService, IAppStateManager
     {
+        public event Action AppStateChangedEvent;
+
         private IUIManager _uiManager;
 
         public Enumerators.AppState AppState { get; private set; } = Enumerators.AppState.Unknown;
@@ -28,6 +30,8 @@ namespace HotForgeStudio.HorrorBox
                 return;
 
             AppState = stateTo;
+
+            AppStateChangedEvent?.Invoke();
 
             switch (stateTo)
             {

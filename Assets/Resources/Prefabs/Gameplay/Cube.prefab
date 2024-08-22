@@ -14,12 +14,13 @@ GameObject:
   - component: {fileID: 4395902046107689493}
   - component: {fileID: 6836696452002320545}
   - component: {fileID: 6088304804060817830}
-  m_Layer: 0
+  - component: {fileID: 3258778783778774875}
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &6839202652940804003
 Transform:
@@ -105,7 +106,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.35, y: 1, z: 1.35}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &6836696452002320545
 Rigidbody:
@@ -146,3 +147,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f72b4d41385d1ce409ca5986fe0ac060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!143 &3258778783778774875
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389761794187364093}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.6
+  m_SlopeLimit: 45
+  m_StepOffset: 0
+  m_SkinWidth: 0.0001
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.5, z: 0}

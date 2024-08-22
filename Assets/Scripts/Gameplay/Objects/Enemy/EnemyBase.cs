@@ -8,15 +8,18 @@ namespace HotForgeStudio.HorrorBox
 {
     public abstract class EnemyBase
     {
-        public GameObject SelfObject { get; protected set; }
-
         protected IGameplayManager _gameplayManager;
+
+        protected PlayerController _playerController;
+        private ExplosionController _explosionController;
+
+        public GameObject SelfObject { get; private set; }
+
+        public EnemyType EnemyType { get; private set; }
 
         protected Transform _transform => SelfObject != null ? SelfObject.transform : null;
 
         private OnBehaviourHandler _onBehaviourHandler;
-
-        protected PlayerController _playerController;
 
         protected EnemyInfo _enemyInfo;
 
@@ -31,12 +34,15 @@ namespace HotForgeStudio.HorrorBox
             _gameplayManager = GameClient.Get<IGameplayManager>();
 
             _playerController = _gameplayManager.GetController<PlayerController>();
+            _explosionController = _gameplayManager.GetController<ExplosionController>();
 
             _enemyInfo = _gameplayManager.GameplayData.enemyInfo;
         }
 
-        public void Init(Transform parent, Vector2 position, EnemyType enemyType)
+        public virtual void Init(Transform parent, Vector2 position, EnemyType enemyType)
         {
+            EnemyType = enemyType;
+
             GameObject gameObject = GameClient.Get<ILoadObjectsManager>().
                 GetObjectByPath<GameObject>($"Prefabs/Gameplay/{_prefabsName[enemyType]}");
             SelfObject = MonoBehaviour.Instantiate(gameObject, new Vector3(position.x,
@@ -57,6 +63,7 @@ namespace HotForgeStudio.HorrorBox
 
         public void Kill()
         {
+            _explosionController.SpawnExplosion(SelfObject.transform.position);
         }
 
         public virtual void Update()

@@ -13,7 +13,7 @@ namespace HotForgeStudio.HorrorBox
 
         private readonly object _sync = new object();
 
-        private ILoadObjectsManager _loadObjectsManager;
+        private IGameplayManager _gameplayManager;
 
         private List<InputEvent> _inputHandlers = new List<InputEvent>();
 
@@ -91,11 +91,22 @@ namespace HotForgeStudio.HorrorBox
 
         public void Init()
         {
+            _gameplayManager = GameClient.Get<IGameplayManager>();
+
             CanHandleInput = false;
 
             BlindArea = new List<Rect>();
 
             CreateMoveJoystick();
+
+            _gameplayManager.GameplayStartedEvent += GameplayStartedEventHandler;
+        }
+
+        public void Dispose()
+        {
+            _gameplayManager.GameplayStartedEvent += GameplayStartedEventHandler;
+
+            _inputHandlers.Clear();
         }
 
         public void Update()
@@ -112,11 +123,6 @@ namespace HotForgeStudio.HorrorBox
             }
         }
 
-        public void Dispose()
-        {
-            _inputHandlers.Clear();
-        }
-
         private void CreateMoveJoystick()
         {
             var moveJoystick = GameClient.Get<ILoadObjectsManager>().GetObjectByPath<GameObject>("Prefabs/UI/Controlls/Joystick");
@@ -124,7 +130,7 @@ namespace HotForgeStudio.HorrorBox
             var joystic = Object.Instantiate(moveJoystick, parent);
             _moveJoystick = new Joystick(joystic);
 
-            _moveJoystick.OnJoysticStopsBeingUsed += OnJoysticStopsBeingUsedHandler;
+            _moveJoystick.OnJoystickStopsBeingUsed += OnJoystickStopsBeingUsedHandler;
         }
 
         private void HandleInput()
@@ -211,7 +217,7 @@ namespace HotForgeStudio.HorrorBox
             }
         }
 
-        private void OnJoysticStopsBeingUsedHandler()
+        private void OnJoystickStopsBeingUsedHandler()
         {
             InputEvent item;
             for (int i = 0; i < _inputHandlers.Count; i++)
@@ -223,6 +229,11 @@ namespace HotForgeStudio.HorrorBox
                     item.InvokeInputParametrizedCallback(new object[] { _moveJoystick.Horizontal, _moveJoystick.Vertical });
                 }
             }
+        }
+
+        private void GameplayStartedEventHandler()
+        {
+            _moveJoystick?.StopUsingJoystick();
         }
     }
 

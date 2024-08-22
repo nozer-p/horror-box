@@ -29,7 +29,7 @@ namespace HotForgeStudio.HorrorBox
 
         private OnBehaviourHandler _onBehaviourHandler;
 
-        public Action OnJoysticStopsBeingUsed;
+        public Action OnJoystickStopsBeingUsed;
 
         public float Horizontal
         {
@@ -50,6 +50,7 @@ namespace HotForgeStudio.HorrorBox
         {
             get => _isUsing;
         }
+
         public float HandleRange
         {
             get => _handleRange;
@@ -159,7 +160,7 @@ namespace HotForgeStudio.HorrorBox
         {
             _isUsing = false;
 
-            OnJoysticStopsBeingUsed?.Invoke();
+            OnJoystickStopsBeingUsed?.Invoke();
         }
 
         private void HandleInput(float magnitude, Vector2 normalised)
@@ -217,11 +218,16 @@ namespace HotForgeStudio.HorrorBox
 
         private void OnPointerUp(PointerEventData eventData)
         {
+            StopUsingJoystick();
+        }
+
+        public void StopUsingJoystick()
+        {
             _input = Vector2.zero;
             handle.anchoredPosition = Vector2.zero;
             _isUsing = false;
 
-            OnJoysticStopsBeingUsed?.Invoke();
+            OnJoystickStopsBeingUsed?.Invoke();
         }
     }
 }

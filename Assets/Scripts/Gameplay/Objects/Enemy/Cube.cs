@@ -1,3 +1,4 @@
+using HotForgeStudio.HorrorBox.Common;
 using UnityEngine;
 
 namespace HotForgeStudio.HorrorBox
@@ -6,9 +7,18 @@ namespace HotForgeStudio.HorrorBox
     {
         private MatchController _matchController;
 
+        private CharacterController _characterController;
+
         public Cube() : base()
         {
             _matchController = _gameplayManager.GetController<MatchController>();
+        }
+
+        public override void Init(Transform parent, Vector2 position, Enumerators.EnemyType enemyType)
+        {
+            base.Init(parent, position, enemyType);
+
+            _characterController = SelfObject.GetComponent<CharacterController>();
         }
 
         public override void Update()
@@ -17,14 +27,17 @@ namespace HotForgeStudio.HorrorBox
 
             if (_transform != null && _playerController.Player.Transform != null)
             {
-                float step = _enemyInfo.cubeDefaultSpeed * Mathf.Max((_matchController.GameplaySeconds %
-                    _enemyInfo.cubeIncreaseSpeedTime) * _enemyInfo.cubeSpeedIncrease, 1f) * Time.deltaTime;
-
-                _transform.position = Vector3.MoveTowards(_transform.position,
-                    _playerController.Player.Transform.position, step);
+                float currentSpeed = _enemyInfo.cubeDefaultSpeed + 
+                    _matchController.GameplaySeconds / _enemyInfo.cubeChangeDataTime *
+                    _enemyInfo.cubeSpeedIncrease;
+                Vector3 targetPosition = _playerController.Player.Transform.position;
+                targetPosition.y = _transform.position.y;
+                Vector3 moveDirection = (targetPosition - _transform.position).normalized;
+                _characterController.SimpleMove(moveDirection * currentSpeed);
 
                 Vector3 targetDirection = _playerController.Player.Transform.position - _transform.position;
-                float singleStep = _enemyInfo.cubeDefaultSpeed * Time.deltaTime;
+                targetDirection.y = 0;
+                float singleStep = currentSpeed * Time.deltaTime;
                 Vector3 newDirection = Vector3.RotateTowards(_transform.forward, targetDirection, singleStep, 0.0f);
                 _transform.rotation = Quaternion.LookRotation(newDirection);
             }

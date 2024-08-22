@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameplayData : ScriptableObject
 {
     [Header("Player")]
-    public Vector3 playerSpawnPosition = new Vector3(0f, 0.8f, 0f);
+    public Vector3 playerSpawnPosition = new Vector3(0f, 0.85f, 0f);
     public float playerSpeed = 4.8f;
 
     [Header("Enemy")]
@@ -19,18 +19,20 @@ public class GameplayData : ScriptableObject
     [Serializable]
     public class EnemyInfo
     {
-        public Vector2 enemySpawnPosition = new Vector2(35f, 35f);
+        public float enemySpawnPositionLimit = 35f;
 
-        public float enemySpawnMinDistanceFromPlayer = 7f;
-        public float enemySpawnMaxDistanceFromPlayer = 20f;
+        public float enemySpawnMinDistanceFromPlayer = 15f;
+        public float enemySpawnMaxDistanceFromPlayer = 60f;
 
-        public float cubeSpawnTime = 8f;
+        public float cubeSpawnTime = 7f;
         public float cubeSpawnTimeDecrease = 0.2f;
 
-        public float cubeDefaultSpeed = 3f;
-        public float cubeSpeedIncrease = 0.3f;
-        public float cubeIncreaseSpeedTime = 5f;
+        public float cubeDefaultSpeed = 2f;
+        public float cubeSpeedIncrease = 0.2f;
 
-        public int maxSpawnedBombs = 10;
+        public float cubeChangeDataTime = 5f;
+
+        public int maxSpawnedCubes = 30;
+        public int maxSpawnedBombs = 40;
     }
 }

@@ -14,12 +14,12 @@ GameObject:
   - component: {fileID: 3637870666473947847}
   - component: {fileID: 1278061717180773566}
   - component: {fileID: 7906526013640544398}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &2955066732015498586
 Transform:
